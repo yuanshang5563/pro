@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;
@@ -15,15 +14,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.ys.common.util.RequsetUtils;
-import org.ys.manager.dao.UserMapper;
 import org.ys.manager.model.User;
+import org.ys.manager.service.UserService;
 
 @Controller
 @RequestMapping("/UserController")
 public class UserController {
 	
 	@Autowired
-	private UserMapper userMapper;
+	private UserService userService;
 	
 	@RequestMapping("/addUserPage")
 	public ModelAndView addUserPage(){
@@ -40,7 +39,7 @@ public class UserController {
 			User user = new User();
 			BeanUtilsBean.getInstance().getConvertUtils().register(new SqlDateConverter(null), Date.class);
 			BeanUtils.populate(user, paramMap);
-			userMapper.insert(user);
+			userService.save(user);
 			msg = "增加成功！";
 		} catch (Exception e) {
 			e.printStackTrace();
